@@ -1,12 +1,13 @@
 package task;
 
 
-import java.lang.annotation.Annotation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.InvalidPropertiesFormatException;
 import java.util.Objects;
 
-public  class Task implements Repeatable {
+public class Task implements Repeatable {
     private int id;
     private String title;
     private String description;
@@ -56,7 +57,20 @@ public  class Task implements Repeatable {
         this.dateTime = dateTime;
     }
 
-    public Task(String title, String description, Type type, LocalDateTime dateTime) {
+    public Task(String title, String description, Type type, LocalDateTime dateTime) throws InvalidPropertiesFormatException {
+        if (title.isEmpty()) {
+            throw new InvalidPropertiesFormatException("Поле title не может быть пустым");
+        }
+        if (description.isEmpty()) {
+            throw new InvalidPropertiesFormatException("Поле description не может быть пустым");
+        }
+        if ((type != Type.PERSONAL) && (type != Type.WORK)) {
+            throw new InvalidPropertiesFormatException("Поле type заполненно не корректно");
+        }
+        if (dateTime == null) {
+            throw new InvalidPropertiesFormatException("Поле dateTime не может быть пустым");
+        }
+
         this.id = idGenerator++;
         this.title = title;
         this.description = description;
@@ -77,6 +91,7 @@ public  class Task implements Repeatable {
     public int hashCode() {
         return Objects.hash(id, title, description, type, dateTime);
     }
+
     @Override
     public boolean isAvailable(LocalDate inputDate) {
         return inputDate.equals(getDateTime().toLocalDate());
@@ -84,12 +99,12 @@ public  class Task implements Repeatable {
 
     @Override
     public String toString() {
-        return "Задача {" +
-                "id" + id +
-                ",title='" + title + '\'' +
-                ",description='" + description + '\'' +
-                ",type =" + type +
-                ", dataTime=" + dateTime +
-                '}';
+        String type = this.type == Type.PERSONAL ? "Личный" : "Рабочий";
+        return "ID задачи: " + this.id + "\n" +
+                "Заголовок задачи: " + this.title + "\n" +
+                "Описание задачи: " + this.description + "\n" +
+                "Тип задачи: " + type + "\n" +
+                "Дата задачи: " + this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "\n" +
+                "Время задачи: " + this.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")) + "\n";
     }
 }

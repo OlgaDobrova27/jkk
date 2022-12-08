@@ -1,13 +1,12 @@
 package task;
 
-import java.lang.annotation.Annotation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
+import java.util.InvalidPropertiesFormatException;
 
 public class DailyTask extends Task {
 
-    public DailyTask(String title, String description, Type type, LocalDateTime taskDateTime) {
+    public DailyTask(String title, String description, Type type, LocalDateTime taskDateTime) throws InvalidPropertiesFormatException {
         super(title, description, type, taskDateTime);
     }
 

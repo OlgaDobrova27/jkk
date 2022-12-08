@@ -3,9 +3,10 @@ package task;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.InvalidPropertiesFormatException;
 
 public class MonthlyTask extends Task {
-    public MonthlyTask(String title, String description, Type type, LocalDateTime taskDateTime) {
+    public MonthlyTask(String title, String description, Type type, LocalDateTime taskDateTime) throws InvalidPropertiesFormatException {
         super(title, description, type, taskDateTime);
     }
 

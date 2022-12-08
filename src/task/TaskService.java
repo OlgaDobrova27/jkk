@@ -9,18 +9,20 @@ import java.util.Map;
 
 
 public class TaskService {
-     private Map<Integer,Task> taskMap = new HashMap<>();
-     private Collection <Task> removedTasks = new ArrayList<>() {
-     };
+    private Map<Integer, Task> taskMap = new HashMap<>();
+    private Collection<Task> removedTasks = new ArrayList<>() {
+    };
 
-    public void add(Task task) {taskMap.put(task.getId(),task);}
+    public void add(Task task) {
+        taskMap.put(task.getId(), task);
+    }
 
-    public void edit (int id, Task task) {
+    public void edit(int id, Task task) {
         taskMap.replace(id, task);
 
     }
 
-    public Task getTask (int id) {
+    public Task getTask(int id) {
         return taskMap.get(id);
     }
 
@@ -28,11 +30,12 @@ public class TaskService {
         removedTasks.add(taskMap.get(id));
         taskMap.remove(id);
     }
+
     public Collection<Task> getAllTaskFromTaskList() {
         List<Task> resultList = new ArrayList<>();
-        for (Map.Entry<Integer,Task> integerTaskEntry : taskMap.entrySet()) {
+        for (Map.Entry<Integer, Task> integerTaskEntry : taskMap.entrySet()) {
             var task = integerTaskEntry.getValue();
-                resultList.add(task);
+            resultList.add(task);
         }
         return resultList;
     }
@@ -43,7 +46,7 @@ public class TaskService {
 
     public Collection<Task> getAllByDate(LocalDate inputDate) {
         List<Task> resultList = new ArrayList<>();
-        for (Map.Entry<Integer,Task> integerTaskEntry : taskMap.entrySet()) {
+        for (Map.Entry<Integer, Task> integerTaskEntry : taskMap.entrySet()) {
             var task = integerTaskEntry.getValue();
             if (task.isAvailable(inputDate)) {
                 resultList.add(task);
@@ -51,9 +54,10 @@ public class TaskService {
         }
         return resultList;
     }
+
     public Map<LocalDate, List<Task>> getAllTaskByGroup() {
-        Map<LocalDate,List<Task>> taskByDate = new HashMap<>();
-        for (Task value : taskMap.values()){
+        Map<LocalDate, List<Task>> taskByDate = new HashMap<>();
+        for (Task value : taskMap.values()) {
             addGroupedTask(taskByDate, value);
         }
         return taskByDate;
@@ -62,7 +66,7 @@ public class TaskService {
     private void addGroupedTask(Map<LocalDate, List<Task>> taskByDate, Task task) {
         if (!taskByDate.containsKey(task.getDateTime().toLocalDate())) {
             taskByDate.put(task.getDateTime().toLocalDate(), List.of(task));
-        }else{
+        } else {
             var groupedTask = taskByDate.get(task.getDateTime().toLocalDate());
             groupedTask.add(task);
             taskByDate.put(task.getDateTime().toLocalDate(), List.of(task));
